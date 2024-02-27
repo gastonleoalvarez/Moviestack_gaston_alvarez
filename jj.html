@@ -1,0 +1,200 @@
+const input = document.getElementById('contenedor-opciones')
+const opc = document.getElementById('casillero')
+
+//se obtienen el genero de cada pelicula mediante un map
+const genres = peliculas.map(pelicula => pelicula.genres).flat() //el metodo flat se usa para juntar tooos los elementos de el array en uno solo
+
+
+//funcion para descartar los generos repetidos
+const generos = []
+
+genres.forEach(genre => {  //recorre todos los generos
+    if(!generos.includes(genre)){ //se evalua si la vriable generos ya contiene el elemento  
+        generos.push(genre) // si entra en el if signifca que no lo contiene entonces lo agrega
+    }
+})
+
+
+//crear las opciones
+function crearOpciones(genre) {
+    return `
+        <label>${genre}</label>
+        <select id="opciones" name="opciones" value="${genre}">
+        <option value="${genre}"></option>
+    </select>`;
+}
+
+const fnreduce = (template, genre) => template + crearOpciones(genre)
+opc.innerHTML = generos.reduce(fnreduce, "")
+
+
+
+/*
+function crearOpciones(genres) {
+    return `<option value="${genres}">${genres}</option>`;
+}*/
+
+
+// Dentro del bucle que crea las opciones
+for (const elemento of generos) {
+    // se añaden las opciones al select
+    document.getElementById('opciones').innerHTML += crearOpciones(elemento);
+}
+
+document.getElementById('opciones').addEventListener('change', () => {
+    const selectedGenre = document.getElementById('selectGenre').value;
+
+    // Filtra por nombre
+    const peliculasFiltradas = filtrarPeliculas(peliculas, input.value);
+
+    // Filtra por género
+    const peliculasFiltradasPorGenero = filtrarGenero(peliculasFiltradas, [selectedGenre]);
+
+    // Muestra las películas en pantalla
+    mostrarCards(peliculasFiltradasPorGenero, main);
+});
+
+
+//creacion de los checkboxs
+for( const elemento of generos){
+    //se crean las opciones en el innerhtml
+    opciones.innerHTML += crearOpciones(elemento)
+}
+
+//eventos
+//MOSTRAR MENSAJE DE ERROR
+function mostrarCards(lista, elemento) {
+    let template = "";
+    for (const iteracion of lista) {
+        template += diseñoTarjeta(iteracion);
+    }
+    if (lista.length === 0) {
+        template = `<h2 class="text-white text-3xl"> No se encontró la película<h2>`;
+    }
+    elemento.innerHTML = template;
+}
+
+
+
+
+
+input.addEventListener('input', () => {
+    // Filtra por nombre
+    const peliculasFiltradas = filtrarPeliculas(peliculas, input.value);
+
+    // Filtra por género
+    const valoresVerificados = verificar()
+
+    const peliculasFiltradasPorGenero = filtrarGenero(peliculasFiltradas, valoresVerificados)
+    // Muestra las películas en pantalla
+    mostrarCards(peliculasFiltradasPorGenero, main);
+});
+
+
+
+//FILTROS POR CHECKBOX
+opc.addEventListener('input', () => {
+
+    //filtra por nombre
+    const peliculasFiltradas = filtrarPeliculas(peliculas, input.value )
+
+    const valoresVerificados = verificar()
+    //filtra por genero
+    const peliculasFiltradasPorGenero = filtrarGenero(peliculasFiltradas, valoresVerificados)
+
+    //muestra los personajes en pantalla 
+    mostrarCards(peliculasFiltradasPorGenero, main)
+})
+
+
+
+//se crea una funcion para filtrar peliculas por nombre
+function filtrarPeliculas( listaPeliculas, nombre ){ //recibe la lista de peliculas y el nombre
+    return listaPeliculas.filter( pelicula => pelicula.title.toLowerCase().startsWith(nombre.toLowerCase()))
+    //se hace un filter para cada nombre, recibe una pelicula
+}
+
+
+//funcion para filtrar las peliculas por genero
+function filtrarGenero( listaPeliculas, seleccionados){ //recibe la lista y los generos seleccionados
+    if(seleccionados.length == 0){ //evalua que la lista de seleccionados no sea cero
+        return listaPeliculas // si es 0 que devuelva el listado completo 
+    }else{ //sino que muestre los seleccionados
+    return listaPeliculas.filter(pelicula => seleccionados.some(seleccionado => pelicula.genres.includes(seleccionado)))
+    }
+    //si algun seleccionado esta incluido en personaje.genre
+}
+
+
+
+function verificar(){
+    const check = document.querySelectorAll('[type="checkbox"]') //selecciona solo los checkbox que estan marcados
+
+    const values =[] //variable creada para guardar el array
+    for(const checkbox of check){ //recorre el array 
+        if(checkbox.checked){ 
+            values.push(checkbox.value)
+        }
+    }
+    return values
+}
+
+
+
+
+
+
+
+/*
+const genres = peliculas.map(pelicula => pelicula.genres).flat();
+        const generos = [...new Set(genres)];
+
+        function crearOpciones(genres) {
+            return `<option value="${genres}">${genres}</option>`;
+        }
+
+        // Generar opciones en el menú desplegable
+        for (const elemento of generos) {
+            opc.innerHTML += crearOpciones(elemento);
+        }
+
+        // Evento para cambios en el menú desplegable
+        selectGenre.addEventListener('change', () => {
+            const selectedGenre = selectGenre.value;
+
+            // Filtra por nombre
+            const peliculasFiltradas = filtrarPeliculas(peliculas, input.value);
+
+            // Filtra por género
+            const peliculasFiltradasPorGenero = filtrarGenero(peliculasFiltradas, [selectedGenre]);
+
+            // Muestra las películas en pantalla
+            mostrarCards(peliculasFiltradasPorGenero, main);
+        });
+
+        // Evento para cambios en la barra de búsqueda
+        input.addEventListener('input', () => {
+            // Filtra por nombre
+            const peliculasFiltradas = filtrarPeliculas(peliculas, input.value);
+
+            // Filtra por género
+            const peliculasFiltradasPorGenero = filtrarGenero(peliculasFiltradas, [selectGenre.value]);
+
+            // Muestra las películas en pantalla
+            mostrarCards(peliculasFiltradasPorGenero, main);
+        });
+
+        // Función para filtrar películas por nombre
+        function filtrarPeliculas(listaPeliculas, nombre) {
+            return listaPeliculas.filter(pelicula => pelicula.title.toLowerCase().startsWith(nombre.toLowerCase()));
+        }
+
+        // Función para filtrar películas por género
+        function filtrarGenero(listaPeliculas, seleccionados) {
+            if (seleccionados.length === 0) {
+                return listaPeliculas;
+            } else {
+                return listaPeliculas.filter(pelicula => seleccionados.some(seleccionado => pelicula.genres.includes(seleccionado)));
+            }
+        }
+*/
