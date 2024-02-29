@@ -1,32 +1,18 @@
+import {diseñoTarjeta, mostrarCards, mostrarPeliculasPorGenero, fnreduce, obtenerGeneros, handleSelectorChange } from "./funciones.js"; 
+
 const main = document.getElementById("contenedor-main")  //se obtiene el main mediante el metodo getelementbyid
+const input = document.getElementById('contenedor-opciones')
+const selector = document.getElementById('seleccionarOpcion')
 
-function diseñoTarjeta(pelicula){ //esta funcion crea la tarjeta y su diseño
-    return `
-    <article class="flex flex-col gap-3 w-11/12 md:w-5/12 xl:w-3/12 rounded border">
-    <img class="w-full" src="${pelicula.image}" alt="imagen de ${pelicula.name}">
-    <h2 class="pl-3 text-white text-2xl">${pelicula.title}</h2>
-    <h3 class="pl-3 text-white">${pelicula.genres}</h3>
-    <p class="line-clamp-3 pl-3 text-white">${pelicula.overview}</p>
-    <a class="text-white pl-3 pb-3" href="detalles.html?id=${pelicula.id}">Ver mas</a>
-    </article>
-    `;
-}
+const setGenres = obtenerGeneros (peliculas)
 
+mostrarCards (peliculas, main)
+ selector.innerHTML = setGenres.reduce( fnreduce , "") 
 
 //se hace un bucle para recorrer cada pelicula y para generar una tarjeta por cada pelicula
-function mostrarCards(lista, elemento){
-    let template = ""
-    for( const iteracion of lista){
-        template += diseñoTarjeta (iteracion)
-    }
-    if(lista == 0){
-        template = `<h2 class="text-white text-3xl"> No se encontro la pelicula<h2>`
-    }
-    elemento.innerHTML = template
-}
+
 
 //lama a la funcion para mostrar las cards
-mostrarCards (peliculas, main)
 
 
 for( const elemento of peliculas){
@@ -34,41 +20,8 @@ for( const elemento of peliculas){
     main.innerHTML += diseñoTarjeta(elemento)
 }
 
-                  /*----------------------------------------------------------- FILTROs------------------------------------------------------------------------*/
-
-//FILTROS POR NOMBRE
-const input = document.getElementById('contenedor-opciones')
-const opc = document.getElementById('casillero')
 
 
-//se obtienen el genero de cada pelicula mediante un map
-const genres = peliculas.map(pelicula => pelicula.genres).flat() //el metodo flat se usa para juntar tooos los elementos de el array en uno solo
-
-
-//funcion para descartar los generos repetidos
-const generos = []
-
-genres.forEach(genre => {  //recorre cada genero
-    if(!generos.includes(genre)){ //se evalua si la vriable generos ya contiene el elemento  
-        generos.push(genre) // si entra en el if signifca que no lo contiene entonces lo agrega
-    }
-})
-
-
-//crear las opciones
-function crearOpciones(genre) {
-    return `
-    
-    <option class="text-blue-800" value="${genre}">${genre}</option>
-       `;  
-}
-
-const fnreduce = (template, genre) => template + crearOpciones(genre)
-opc.innerHTML = generos.reduce( fnreduce , "") 
-
-
-opc.addEventListener('change' , () => {
-    console.log(opc.value)
-})
-
-
+selector.addEventListener('change',() => {
+  handleSelectorChange(selector, main)
+});
