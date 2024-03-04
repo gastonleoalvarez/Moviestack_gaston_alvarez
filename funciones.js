@@ -5,7 +5,7 @@ const selector = document.getElementById('seleccionarOpcion')
 export function diseñoTarjeta(pelicula){ //esta funcion crea la tarjeta y su diseño
     return `
     <article class="flex flex-col gap-3 w-11/12 md:w-5/12 xl:w-3/12 rounded border">
-    <img class="w-full" src="${pelicula.image}" alt="imagen de ${pelicula.name}">
+    <img class="w-full" src="https://moviestack.onrender.com/static/${pelicula.image}" alt="imagen de ${pelicula.name}">
     <h2 class="pl-3 text-white text-2xl">${pelicula.title}</h2>
     <h3 class="pl-3 text-white">${pelicula.genres}</h3>
     <p class="line-clamp-3 pl-3 text-white">${pelicula.overview}</p>
@@ -15,24 +15,21 @@ export function diseñoTarjeta(pelicula){ //esta funcion crea la tarjeta y su di
 }
 
 
-//se hace un bucle para recorrer cada pelicula y para generar una tarjeta por cada pelicula
-export function mostrarCards(lista, elemento){
+export function render(lista , elemento, fn){
     let template = ""
     for( const iteracion of lista){
         template += diseñoTarjeta (iteracion)
     }
-    if(lista == 0){
-        template = `<h2 class="text-white text-3xl"> No se encontro la pelicula<h2>`
-    }
     elemento.innerHTML = template
 }
+
 
 
 //crea las opciones de cada genero 
 export function crearOpciones(genre) {
     return `
 
-    <option class="text-blue-800" value="${genre}">${genre}</option>
+    <option class="text-black" value="${genre}">${genre}</option>
        `;  
 }
 
@@ -46,11 +43,11 @@ export function mostrarPeliculasPorGenero() {
     console.log(peliculasFiltradas)
 
     // Limpiar el contenedor de películas
-    mostrarCards (peliculasFiltradas, main)
+    main.innerHTML ="";
 
     // Muestra las películas filtradas en el contenedor
     peliculasFiltradas.forEach(pelicula => {
-        mostrarCards.innerHTML += `<div>${pelicula.title}</div>`;
+        main.innerHTML += diseñoTarjeta(pelicula);
        
     });
 }
