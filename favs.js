@@ -20,9 +20,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-    const addToFavoritesButtons = document.querySelectorAll('.addToFavoritesBtn');
+    const botonFavoritos = document.querySelectorAll('.botonFavoritos');
 
-    addToFavoritesButtons.forEach(button => {
+    botonFavoritos.forEach(button => {
         button.addEventListener('click', function() {
             const movieId = this.dataset.movieId;
             addToFavorites(movieId);
