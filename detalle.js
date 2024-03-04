@@ -14,16 +14,18 @@ fetch( url, init)
 .then(response => response.json())
 .then(data => {
     pelicula = data.movies; 
-const peliculaEncontrada = data.movies.find(pelicula => pelicula.id== id)
+const peliculaEncontrada = data.movies.find(pelicula => pelicula.id == id)
 const main = document.getElementById('detalles-container')
 
 main.innerHTML = `
 <div class="flex flex-nowrap text-white">
-    <div class="p-10">
-    <table class="border-collapse" >
+    <div class="p-10 ml-20 w-120 h-50">
+
+    <img clas="w-90" src="https://moviestack.onrender.com/static/${peliculaEncontrada.image}"/>
+    <table class="border-collapse mt-10" >
     <thead
     <tr>
-        <td>${peliculaEncontrada.image}</td> 
+      
     </tr>
     <tr>
         <th class="border border-separate">Original Lenguaje</th>
@@ -32,7 +34,7 @@ main.innerHTML = `
 
     <tr>
         <th class="border">Released date</th>
-        <td class="border">$${peliculaEncontrada.release_date}</td>
+        <td class="border">${peliculaEncontrada.release_date}</td>
     </tr>
 
     <tr>
@@ -59,18 +61,18 @@ main.innerHTML = `
         <thead>
        
         <tr>
-            <th class="border border-separate">Original Lenguaje</th>
+            <th class="border border-separate">vote average</th>
             <td class="border">${peliculaEncontrada.vote_average}</td> 
         </tr>
     
         <tr>
-            <th class="border">Released date</th>
-            <td class="border">$${peliculaEncontrada.budget}</td>
+            <th class="border">budget</th>
+            <td class="border">USD ${peliculaEncontrada.budget}</td>
         </tr>
     
         <tr>
-            <th class="border">Runtime</th>
-            <td class="border">${peliculaEncontrada.revenue}</td>
+            <th class="border">revenue</th>
+            <td class="border">USD ${peliculaEncontrada.revenue}</td>
         </tr>
          
         </thead>

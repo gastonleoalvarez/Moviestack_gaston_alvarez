@@ -9,7 +9,7 @@ export function diseñoTarjeta(pelicula){ //esta funcion crea la tarjeta y su di
     <h2 class="pl-3 text-white text-2xl">${pelicula.title}</h2>
     <h3 class="pl-3 text-white">${pelicula.genres}</h3>
     <p class="line-clamp-3 pl-3 text-white">${pelicula.overview}</p>
-    <button class="text-white botonFavoritos">Add to favorites</button>
+    <button id="botonFavoritos"class="text-white border">Add to favorites</button>
     <a class="text-white pl-3 pb-3" href="detalles.html?id=${pelicula.id}">Ver mas</a>
     </article>
     `;
